@@ -1,0 +1,8 @@
+The simplest way is at a command line do: systeminfo
+
+You will get a section that looks like:
+Total Physical Memory: 16,383 MB
+Available Physical Memory: 926 MB
+Page File: Max Size: 19,868 MB
+Page File: Available: 4,562 MB
+Page File: In Use: 15,306 MB

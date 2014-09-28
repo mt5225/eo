@@ -1,0 +1,11 @@
+Easy piped or multiple commands
+
+
+You can put anything you want inside of the doublequotes in a a 'nsh -c ""' block, as long as nsh knows how to do it.
+
+1. Copy your script into /usr/nsh/share/extended_objects/myscript.pl
+2. Build a new extended object:
+
+nsh -c "cp //blfs/usr/nsh/share/extended_objects/myscript.pl //??TARGET.HOST??/tmp ; nexec ??TARGET.HOST?? perl /tmp/myscript.pl"
+
+(.) Central Execution

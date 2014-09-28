@@ -1,0 +1,12 @@
+1、数据高速缓存区命中率        SELECT round(1-SUM(PHYSICAL_READS)/(SUM(DB_BLOCK_GETS) + SUM(CONSISTENT_GETS)), 4) * 100 FROM (SELECT CASE WHEN NAME='physical reads' THEN VALUE END PHYSICAL_READS,CASE WHEN NAME = 'db block gets' THEN VALUE END DB_BLOCK_GETS,CASE WHEN NAME = 'consistent gets' THEN VALUE END CONSISTENT_GETS FROM V$SYSSTAT WHERE Name IN ('physical reads','db block gets','consistent gets'))        （监控 SGA 的命中率）命中率应大于0.90最好
+2、库快存命中率        SELECT 100*((sum(pins-reloads))/sum(pins)) from v$librarycache        该计数器返回当前库快存命中率
+3、共享区库缓存区命中率        select round(sum(pins-reloads)/sum(pins) * 100, 2) from v$librarycache        （监控 SGA 中共享缓存区的命中率）命中率应大于0.99
+4、监控 SGA 中字典缓冲区的命中率        select round(sum(gets-getmisses-usage-fixed)/sum(gets) * 100, 2) from v$rowcache        （共享区字典缓存区命中率）命中率应大于0.85
+5、检测回滚段的争用        select round(sum(waits)/sum(gets) * 100, 2) from v$rollstat        小于1%
+6、检测回滚段收缩次数        select sum(shrinks) from v$rollstat, v$rollname where v$rollstat.usn = v$rollname.usn       
+7、监控表空间的 I/O读总数        select sum(f.phyrds) pyr from v$filestat f, dba_data_files df where f.file# = df.file_id        监控表空间的 I/O
+8、监控表空间的 I/O块读总数        select sum(f.phyblkrd) pbr from v$filestat f, dba_data_files df where f.file# = df.file_id        监控表空间的 I/O
+9、监控表空间的 I/O写总数        select sum(f.phywrts) pyw from v$filestat f, dba_data_files df where f.file# = df.file_id        监控表空间的 I/O
+10、监控表空间的 I/O块写总数        select sum(f.phyblkwrt) pbw from v$filestat f, dba_data_files df where f.file# = df.file_id        监控表空间的 I/O
+11、监控 SGA 中重做日志缓存区的命中率        SELECT Decode(immediate_gets+immediate_misses,0,0,immediate_misses/(immediate_gets+immediate_misses)*100) ratio2 FROM　v$latch WHERE　name IN ('redo copy')        应该小于1%
+12、监控内存和硬盘的排序比率        select round(sum(case when name='sorts (disk)' then value else 0 end) / sum(case when name='sorts (memory)' then value else 0 end)*100,2) from (SELECT　 name, value FROM　v$sysstatWHERE　name IN ('sorts (memory)', 'sorts (disk)'))        最好使它小于 10%

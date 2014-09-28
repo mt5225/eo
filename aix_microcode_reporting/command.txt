@@ -1,0 +1,1 @@
+lsmcode -A|grep system|awk  '{print $1}'|sed 's/sys0!system://g'

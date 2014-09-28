@@ -1,0 +1,5 @@
+rscd.exe
+notepad.exe
+wordpad.exe
+boot.ini
+desktop.ini

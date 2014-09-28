@@ -1,0 +1,1 @@
+"su - ??POINT_USER?? 'sqlplus point/??POINT_USER_PASSWORD?? @/pt01/app/test.sql'"\
